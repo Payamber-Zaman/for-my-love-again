@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffe3ea">
+<title>For my girl 💗</title>
+<!-- Optional fonts. If you're offline, pretty fallback fonts are used automatically. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   THEME  (colors are overridden from CONFIG.colors in the script)
+   ============================================================ */
+:root{
+  --cream:#fff6f0;
+  --blush:#ffd9e2;
+  --pink:#ff8fab;
+  --rose:#c92f5d;       /* buttons / strong accents */
+  --deep:#5b2438;       /* main text */
+  --soft:#8a5266;       /* secondary text (still readable on cream) */
+  --card:#fffaf7;
+  --shadow:0 10px 30px rgba(201,47,93,.16);
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);color:var(--deep);line-height:1.6;font-size:1.02rem;
+  background:
+    radial-gradient(circle at 15% 0%,#ffe9ee 0,transparent 45%),
+    radial-gradient(circle at 90% 30%,#ffe0e8 0,transparent 40%),
+    var(--cream);
+  overflow-x:hidden;min-height:100vh;
+}
+body.locked{overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--rose);outline-offset:3px;border-radius:12px}
+[hidden]{display:none!important}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.12}
+h2{font-size:clamp(2rem,8vw,2.8rem);font-style:italic;text-align:center;color:var(--deep)}
+.sub{text-align:center;color:var(--soft);max-width:34ch;margin:.5rem auto 1.6rem}
+
+/* ---------- Buttons ---------- */
+.btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.95rem 1.6rem;border-radius:999px;font-weight:700;letter-spacing:.01em;
+  color:#fff;background:linear-gradient(135deg,#e5517b,var(--rose));
+  box-shadow:0 8px 22px rgba(201,47,93,.35);
+  transition:transform .2s ease,box-shadow .2s ease;min-height:48px;
+}
+.btn:active{transform:scale(.96)}
+.btn.ghost{background:var(--card);color:var(--rose);box-shadow:0 4px 14px rgba(201,47,93,.15);border:2px solid #ffc2d1}
+.btn.glow::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--pink);
+  animation:pulse 2.4s ease-out infinite;pointer-events:none;
+}
+@keyframes pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.28);opacity:0}}
+
+/* ---------- Ambient layers ---------- */
+#bg,#fx{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#bg{z-index:0}
+#fx{z-index:2000}
+#bg span{
+  position:absolute;bottom:-40px;opacity:0;will-change:transform,opacity;
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{
+  0%{transform:translate3d(0,0,0) rotate(0);opacity:0}
+  10%{opacity:.55}
+  90%{opacity:.35}
+  100%{transform:translate3d(var(--drift),-110vh,0) rotate(40deg);opacity:0}
+}
+.pop{
+  position:absolute;transform:translate(-50%,-50%);will-change:transform,opacity;
+  animation:popUp 1.1s ease-out forwards;
+}
+@keyframes popUp{
+  0%{transform:translate(-50%,-50%) scale(.4);opacity:1}
+  100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.1);opacity:0}
+}
+#toast{
+  position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));z-index:2100;
+  transform:translate(-50%,30px);opacity:0;pointer-events:none;
+  background:var(--deep);color:#fff;padding:.7rem 1.1rem;border-radius:999px;
+  font-size:.95rem;max-width:88vw;text-align:center;transition:.35s ease;
+}
+#toast.show{transform:translate(-50%,0);opacity:1}
+
+/* ============================================================
+   WELCOME SCREEN
+   ============================================================ */
+.welcome{
+  position:fixed;inset:0;z-index:1500;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:2rem 1.4rem;
+  background:
+    radial-gradient(circle at 50% 18%,#fff 0,transparent 55%),
+    linear-gradient(180deg,#ffe6ec,#ffd1de);
+  transition:opacity .8s ease,transform .8s ease;
+}
+.welcome.leave{opacity:0;transform:scale(1.08);pointer-events:none}
+.welcome .cat-hero{width:150px;height:150px;margin-bottom:.6rem;animation:bob 3.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.welcome h1{font-size:clamp(2.2rem,10vw,3.4rem);font-style:italic;margin-bottom:.9rem}
+.welcome p{max-width:30ch;color:var(--soft);margin-bottom:1.8rem;font-size:1.08rem}
+.w-deco{position:absolute;font-size:1.4rem;opacity:.7;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.15;transform:scale(.8)}}
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+#app{position:relative;z-index:1;opacity:0;transition:opacity 1.2s ease .2s}
+#app.show{opacity:1}
+section{padding:4.2rem 1.2rem;max-width:720px;margin:0 auto;position:relative}
+
+/* Hero */
+.hero{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.hero .for{font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--soft)}
+.hero h1{font-size:clamp(3.6rem,19vw,6.6rem);font-style:italic;color:var(--rose);margin:.1em 0 .25em;text-shadow:0 6px 24px rgba(255,143,171,.45)}
+.hero .line{max-width:30ch;color:var(--soft);margin-bottom:1.6rem}
+.hero .counter{margin-bottom:1.4rem;font-weight:700;color:var(--rose)}
+.hero .spark{position:absolute;color:var(--pink);animation:twinkle 3.2s ease-in-out infinite}
+
+/* Envelope + Letter */
+.env-stage{display:flex;flex-direction:column;align-items:center;gap:1rem;perspective:900px}
+.env{
+  position:relative;width:min(86vw,340px);aspect-ratio:1.5;border-radius:14px;
+  background:linear-gradient(160deg,#ffd0dc,#ffb8cb);box-shadow:var(--shadow);
+}
+.env .back-fold{position:absolute;inset:0;border-radius:14px;
+  background:linear-gradient(200deg,transparent 49%,rgba(201,47,93,.12) 50%),
+             linear-gradient(160deg,transparent 49%,rgba(201,47,93,.12) 50%)}
+.env .flap{
+  position:absolute;left:0;right:0;top:0;height:62%;z-index:3;transform-origin:top;
+  background:linear-gradient(180deg,#ffa6bd,#ff93ad);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transition:transform .75s ease,z-index 0s .35s;
+}
+.env.open .flap{transform:rotateX(180deg);z-index:1}
+.env .seal{
+  position:absolute;left:50%;top:50%;z-index:4;transform:translate(-50%,-50%);
+  font-size:2.2rem;filter:drop-shadow(0 4px 6px rgba(201,47,93,.4));
+  animation:beat 1.8s ease-in-out infinite;transition:opacity .4s;
+}
+.env.open .seal{opacity:0;animation:none}
+@keyframes beat{50%{transform:translate(-50%,-50%) scale(1.15)}}
+.env-hint{color:var(--soft);font-size:.95rem}
+.paper-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows 1s ease;width:100%}
+.paper-wrap.open{grid-template-rows:1fr}
+.paper-wrap>div{min-height:0;overflow:hidden}
+.paper{
+  margin:1.6rem auto 0;max-width:560px;padding:2rem 1.5rem 1.8rem;border-radius:22px;
+  background:
+    repeating-linear-gradient(transparent 0 33px,rgba(255,143,171,.18) 33px 34px),
+    #fffdf9;
+  box-shadow:var(--shadow);border:1px solid #ffe0e8;
+  font-family:var(--serif);font-size:1.32rem;line-height:34px;cursor:pointer;
+}
+.paper p{margin-bottom:34px}
+.paper p.typing::after{content:"|";color:var(--rose);animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.paper .sign{font-style:italic;font-size:1.5rem;color:var(--rose);opacity:0;transition:opacity 1.4s ease;margin:0}
+.paper .sign.show{opacity:1}
+.skip-hint{text-align:center;font-family:var(--sans);font-size:.8rem;color:var(--soft);line-height:1.4;margin-top:1rem}
+
+/* Love corner */
+.garden{
+  position:relative;height:270px;border-radius:30px;overflow:hidden;box-shadow:var(--shadow);
+  background:linear-gradient(180deg,#ffeef2 0%,#ffd5e0 62%,#e7d9b8 63%,#c9e0b2 100%);
+}
+.garden .roses{position:absolute;left:0;right:0;bottom:6px;display:flex;justify-content:space-around;align-items:flex-end;padding:0 4px}
+.garden .roses svg{width:21%;max-width:96px;height:auto;transform-origin:50% 100%;animation:sway 4.5s ease-in-out infinite}
+.garden .roses svg:nth-child(2){animation-delay:-1.2s}
+.garden .roses svg:nth-child(3){animation-delay:-2.4s;width:24%}
+.garden .roses svg:nth-child(4){animation-delay:-.6s}
+.garden .roses svg:nth-child(5){animation-delay:-3s}
+@keyframes sway{50%{transform:rotate(3.5deg)}}
+.fh{
+  position:absolute;font-size:1.7rem;min-width:44px;min-height:44px;display:grid;place-items:center;
+  animation:hover 3.4s ease-in-out infinite;transition:transform .35s ease,opacity .35s ease;
+}
+.fh.gone{transform:scale(0);opacity:0;pointer-events:none}
+@keyframes hover{50%{transform:translateY(-12px)}}
+.garden-count{text-align:center;color:var(--soft);font-size:.9rem;margin:.7rem 0 1.8rem}
+
+.cats{display:flex;justify-content:center;gap:.4rem;margin:.5rem 0 1.2rem}
+.cat-btn{position:relative;width:42%;max-width:170px;padding-top:56px;transition:transform .2s}
+.cat-btn:active{transform:scale(.95)}
+.cat-btn svg{width:100%;height:auto;display:block}
+.bubble{
+  position:absolute;left:50%;top:0;transform:translate(-50%,10px) scale(.85);opacity:0;pointer-events:none;
+  background:#fff;border:2px solid #ffc2d1;border-radius:18px;padding:.45rem .8rem;width:max-content;max-width:190px;
+  font-size:.85rem;line-height:1.35;color:var(--deep);box-shadow:0 6px 16px rgba(201,47,93,.18);
+  transition:.3s ease;
+}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:#fff;
+  border-right:2px solid #ffc2d1;border-bottom:2px solid #ffc2d1;transform:translateX(-50%) rotate(45deg)}
+.cat-btn.talk .bubble{opacity:1;transform:translate(-50%,0) scale(1)}
+.cat-hint{text-align:center;color:var(--soft);font-size:.9rem;margin-bottom:1.8rem}
+
+.notes{display:flex;flex-wrap:wrap;justify-content:center;gap:.7rem;margin-bottom:2rem}
+.note{
+  background:var(--card);border:2px dashed #ffbfd0;border-radius:18px;padding:.7rem 1rem;
+  font-family:var(--serif);font-style:italic;font-size:1.2rem;box-shadow:0 5px 14px rgba(201,47,93,.1);
+  transform:rotate(var(--tilt,0deg));transition:transform .2s;
+}
+.note:active{transform:rotate(0) scale(.95)}
+.random-card{
+  background:var(--card);border-radius:26px;padding:1.6rem 1.3rem;text-align:center;box-shadow:var(--shadow);
+  border:1px solid #ffe0e8;
+}
+.random-card .msg{
+  font-family:var(--serif);font-style:italic;font-size:1.55rem;line-height:1.3;min-height:4.2rem;
+  display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem;
+}
+.swap{animation:swap .6s ease}
+@keyframes swap{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+
+/* Reasons */
+.progress{text-align:center;color:var(--rose);font-weight:700;margin-bottom:1rem}
+.bar{height:8px;border-radius:99px;background:#ffe0e8;max-width:300px;margin:0 auto 1.4rem;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--rose));transition:width .5s ease;border-radius:inherit}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.tile{
+  aspect-ratio:1;border-radius:14px;font-weight:700;font-size:.95rem;color:var(--rose);
+  background:linear-gradient(160deg,#fff,#ffe8ee);border:2px solid #ffc7d5;
+  box-shadow:0 3px 8px rgba(201,47,93,.1);transition:transform .15s;position:relative;
+}
+.tile:active{transform:scale(.9)}
+.tile.done{background:linear-gradient(160deg,#ff9db5,var(--rose));color:#fff;border-color:transparent}
+.tile.done::after{content:"♥";position:absolute;right:4px;top:0;font-size:.7rem;opacity:.9}
+.center-row{text-align:center;margin-top:1.4rem}
+
+.sheet-back{
+  position:fixed;inset:0;z-index:1200;background:rgba(91,36,56,.45);backdrop-filter:blur(3px);
+  display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .3s;
+}
+.sheet-back.show{opacity:1}
+.sheet{
+  width:100%;max-width:520px;background:#fffaf6;border-radius:28px 28px 0 0;padding:1.6rem 1.4rem calc(1.4rem + env(safe-area-inset-bottom));
+  text-align:center;transform:translateY(40px);transition:transform .35s ease;position:relative;
+}
+.sheet-back.show .sheet{transform:none}
+.sheet .num{font-weight:700;color:var(--soft);font-size:.9rem}
+.sheet .why{
+  font-family:var(--serif);font-style:italic;font-size:1.7rem;line-height:1.3;min-height:7.5rem;
+  display:flex;align-items:center;justify-content:center;margin:.8rem 0 1.1rem;
+}
+.sheet .nav{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+.sheet .x{position:absolute;right:10px;top:10px;width:44px;height:44px;font-size:1.3rem;border-radius:50%;color:var(--soft)}
+@media(min-width:600px){
+  .tiles{grid-template-columns:repeat(10,1fr)}
+  .sheet-back{align-items:center}
+  .sheet{border-radius:28px}
+}
+
+/* Timeline */
+.timeline{position:relative;padding-left:34px;margin-top:1rem}
+.timeline::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:3px;border-radius:3px;
+  background:linear-gradient(var(--pink),#ffd0dc)}
+.mem{position:relative;margin-bottom:1.6rem}
+.mem::before{
+  content:"♥";position:absolute;left:-34px;top:.9rem;width:25px;height:25px;border-radius:50%;
+  background:var(--rose);color:#fff;font-size:.8rem;display:grid;place-items:center;box-shadow:0 0 0 5px #ffe3ea;
+}
+.mem .card{background:var(--card);border-radius:22px;padding:1.1rem 1.2rem;box-shadow:var(--shadow);border:1px solid #ffe0e8}
+.mem .when{font-weight:700;color:var(--rose);font-size:.9rem}
+.mem h3{font-size:1.6rem;font-style:italic;margin:.1rem 0 .3rem}
+.mem p{color:var(--soft)}
+.badge{display:inline-block;margin-top:.6rem;font-size:.75rem;font-weight:700;background:#fff0c9;color:#7a5200;border-radius:99px;padding:.2rem .7rem}
+.js .mem{opacity:0;transform:translateX(18px);transition:opacity .7s ease,transform .7s ease}
+.js .mem.in{opacity:1;transform:none}
+
+/* Surprise */
+.psst{text-align:center}
+.psst h2{margin-bottom:1.4rem}
+.moment{
+  position:fixed;inset:0;z-index:1800;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:2rem 1.6rem;opacity:0;transition:opacity 1s ease;
+  background:radial-gradient(circle at 50% 40%,#ff9db5 0,#c92f5d 55%,#7d1838 100%);color:#fff;
+}
+.moment.show{opacity:1}
+.moment .l1,.moment .l2{
+  max-width:26ch;font-family:var(--serif);font-style:italic;opacity:0;transform:translateY(12px);
+  transition:opacity 1.6s ease,transform 1.6s ease;
+}
+.moment .l1{font-size:clamp(1.55rem,6.6vw,2.2rem);line-height:1.35;text-shadow:0 0 22px rgba(255,255,255,.7)}
+.moment .l2{font-size:clamp(1.25rem,5.2vw,1.7rem);margin-top:1.8rem;text-shadow:0 0 16px rgba(255,255,255,.55)}
+.moment .on{opacity:1;transform:none}
+.moment .close{margin-top:2.2rem;opacity:0;transition:opacity 1s ease;pointer-events:none;
+  background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.7);color:#fff;border-radius:999px;padding:.8rem 1.4rem;font-weight:700}
+.moment .close.on{opacity:1;pointer-events:auto}
+.moment .x{position:absolute;top:calc(10px + env(safe-area-inset-top));right:10px;width:48px;height:48px;font-size:1.4rem;color:#fff;border-radius:50%}
+.moment .rise{position:absolute;bottom:-40px;animation:floatUp linear forwards}
+.moment-hearts{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+
+/* Music */
+.player{
+  background:linear-gradient(160deg,#fffaf7,#ffe9ef);border-radius:30px;padding:1.6rem 1.3rem;text-align:center;
+  box-shadow:var(--shadow);border:1px solid #ffe0e8;
+}
+.vinyl{
+  width:150px;height:150px;border-radius:50%;margin:0 auto 1.1rem;position:relative;
+  background:repeating-radial-gradient(circle at 50% 50%,#2c1621 0 3px,#3a1d2b 3px 5px);
+  box-shadow:0 10px 24px rgba(91,36,56,.35);
+}
+.vinyl::before{content:"";position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,#ff8fab,#e5517b);}
+.vinyl::after{content:"♥";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:1.1rem}
+.vinyl.spin{animation:spin 5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.eq{display:flex;gap:4px;justify-content:center;align-items:flex-end;height:26px;margin:.2rem 0 .8rem}
+.eq i{width:6px;height:6px;border-radius:3px;background:var(--pink);transition:height .3s}
+.player.on .eq i{animation:eq 1s ease-in-out infinite}
+.player.on .eq i:nth-child(2){animation-delay:-.3s}
+.player.on .eq i:nth-child(3){animation-delay:-.6s}
+.player.on .eq i:nth-child(4){animation-delay:-.15s}
+.player.on .eq i:nth-child(5){animation-delay:-.45s}
+@keyframes eq{0%,100%{height:6px}50%{height:24px}}
+.song-title{font-family:var(--serif);font-style:italic;font-size:1.6rem}
+.song-artist{color:var(--soft);margin-bottom:1rem}
+#listenLink{margin-top:.8rem;text-decoration:none}
+.music-note{color:var(--soft);font-size:.9rem;margin-top:.9rem;min-height:1.4rem}
+
+footer{text-align:center;padding:3rem 1rem calc(4rem + env(safe-area-inset-bottom));color:var(--soft);font-family:var(--serif);font-style:italic;font-size:1.3rem}
+
+/* ---------- Pause ambient animation when tab hidden ---------- */
+.paused #bg span,.paused .w-deco{animation-play-state:paused}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+  #bg{display:none}
+  .btn.glow::after{display:none}
+}
+</style>
+</head>
+
+<body class="locked">
+
+<!-- Shared SVG art (rendered once, reused with <use>) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="rose" viewBox="0 0 100 160">
+      <path d="M50 70 C48 100 52 130 50 158" stroke="#5b8a5a" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M50 118 C32 108 20 112 14 122 C28 132 44 128 50 118Z" fill="#79a878"/>
+      <path d="M51 132 C68 122 82 126 88 136 C74 146 58 142 51 132Z" fill="#6b9b6a"/>
+      <circle cx="50" cy="44" r="32" fill="var(--r1,#e04668)"/>
+      <circle cx="50" cy="42" r="22" fill="var(--r2,#ee5f7f)"/>
+      <path d="M34 44 C34 28 66 28 66 44 C66 58 38 58 38 44 C38 36 60 36 60 44" fill="none" stroke="var(--r3,#b02150)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="50" cy="43" r="9" fill="var(--r1,#e04668)"/>
+      <path d="M43 43 C43 37 57 37 57 43 C57 48 46 48 46 43" fill="none" stroke="var(--r3,#9d1c47)" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="cat" viewBox="0 0 120 130">
+      <path d="M92 110 C120 110 120 70 104 64" stroke="var(--cat,#fff)" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <ellipse cx="56" cy="98" rx="36" ry="28" fill="var(--cat,#fff)" stroke="#efc3cb" stroke-width="1.5"/>
+      <path d="M30 40 L28 10 L54 28Z" fill="var(--cat,#fff)" stroke="#efc3cb" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M82 40 L84 10 L58 28Z" fill="var(--cat,#fff)" stroke="#efc3cb" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M33 34 L32 19 L46 28Z" fill="#ffb3c4"/>
+      <path d="M79 34 L80 19 L66 28Z" fill="#ffb3c4"/>
+      <circle cx="56" cy="52" r="30" fill="var(--cat,#fff)" stroke="#efc3cb" stroke-width="1.5"/>
+      <path d="M40 52 q5 -6 10 0" stroke="#4a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M62 52 q5 -6 10 0" stroke="#4a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="37" cy="62" r="5" fill="#ff9db5" opacity=".6"/>
+      <circle cx="75" cy="62" r="5" fill="#ff9db5" opacity=".6"/>
+      <path d="M53 59 h6 l-3 4z" fill="#ff7d9c"/>
+      <path d="M56 63 q-4 5 -8 2 M56 63 q4 5 8 2" stroke="#4a2030" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M30 58 l-14 -3 M30 63 l-14 3 M82 58 l14 -3 M82 63 l14 3" stroke="#d9aab4" stroke-width="1.6" stroke-linecap="round"/>
+      <ellipse cx="42" cy="123" rx="11" ry="6" fill="var(--cat,#fff)" stroke="#efc3cb" stroke-width="1.5"/>
+      <ellipse cx="70" cy="123" rx="11" ry="6" fill="var(--cat,#fff)" stroke="#efc3cb" stroke-width="1.5"/>
+      <path d="M56 80 c-6 -8 -16 0 -8 7 l8 7 l8 -7 c8 -7 -2 -15 -8 -7z" fill="#ff7d9c"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="bg" aria-hidden="true"></div>
+<div id="fx" aria-hidden="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ============================ WELCOME ============================ -->
+<div class="welcome" id="welcome">
+  <span class="w-deco" style="left:12%;top:14%">✨</span>
+  <span class="w-deco" style="right:14%;top:20%;animation-delay:-1s">🌷</span>
+  <span class="w-deco" style="left:18%;bottom:18%;animation-delay:-2s">💗</span>
+  <span class="w-deco" style="right:10%;bottom:24%;animation-delay:-.5s">✨</span>
+  <svg class="cat-hero" viewBox="0 0 120 130" aria-hidden="true"><use href="#cat"/></svg>
+  <h1 id="welcomeTitle">Hey, my pretty girl… 🎀</h1>
+  <p id="welcomeText">I made a little something just for you, my love. Every little detail comes from my heart.</p>
+  <button class="btn glow" id="openBtn" type="button"><span id="welcomeBtn">Open your little surprise 💌</span></button>
+</div>
+
+<!-- ============================== APP ============================== -->
+<div id="app" inert>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <span class="spark" style="left:10%;top:16%">✦</span>
+    <span class="spark" style="right:12%;top:24%;animation-delay:-1.4s">✧</span>
+    <span class="spark" style="left:18%;bottom:20%;animation-delay:-2.2s">✦</span>
+    <p class="for">made with love, for</p>
+    <h1 id="heroName">Noor</h1>
+    <p class="line" id="heroLine">A tiny world, built just for my favorite person.</p>
+    <p class="counter" id="counter" hidden></p>
+    <button class="btn" id="toLetter" type="button">Start with my letter 💌</button>
+  </section>
+
+  <!-- LETTER -->
+  <section id="letter">
+    <h2>A letter for you 💌</h2>
+    <p class="sub">Tap the envelope to open it.</p>
+    <div class="env-stage">
+      <button class="env" id="env" type="button" aria-label="Open the love letter" aria-expanded="false">
+        <span class="back-fold"></span>
+        <span class="flap"></span>
+        <span class="seal">💗</span>
+      </button>
+      <p class="env-hint" id="envHint">It's addressed to you</p>
+    </div>
+    <div class="paper-wrap" id="paperWrap">
+      <div>
+        <article class="paper" id="paper" aria-live="polite">
+          <div id="letterBody"></div>
+          <p class="sign" id="letterSign"></p>
+          <p class="skip-hint" id="skipHint">tap the letter to read it faster</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOVE CORNER -->
+  <section id="corner">
+    <h2>Our little love corner 🌹</h2>
+    <p class="sub">Everything here reacts to you. Go on, tap things.</p>
+
+    <div class="garden" id="garden" aria-label="A little rose garden">
+      <div class="roses" aria-hidden="true">
+        <svg viewBox="0 0 100 160"><use href="#rose"/></svg>
+        <svg viewBox="0 0 100 160" style="--r1:#ff8fab;--r2:#ffb3c6;--r3:#d6336c"><use href="#rose"/></svg>
+        <svg viewBox="0 0 100 160"><use href="#rose"/></svg>
+        <svg viewBox="0 0 100 160" style="--r1:#ff8fab;--r2:#ffb3c6;--r3:#d6336c"><use href="#rose"/></svg>
+        <svg viewBox="0 0 100 160"><use href="#rose"/></svg>
+      </div>
+    </div>
+    <p class="garden-count" id="gardenCount">Catch the floating hearts 💗 · 0 caught</p>
+
+    <div class="cats">
+      <button class="cat-btn" type="button" data-cat="0" aria-label="Tap the white kitty">
+        <span class="bubble" aria-hidden="true"></span>
+        <svg viewBox="0 0 120 130" style="--cat:#fffdfb" aria-hidden="true"><use href="#cat"/></svg>
+      </button>
+      <button class="cat-btn" type="button" data-cat="1" aria-label="Tap the ginger kitty">
+        <span class="bubble" aria-hidden="true"></span>
+        <svg viewBox="0 0 120 130" style="--cat:#f6cfae" aria-hidden="true"><use href="#cat"/></svg>
+      </button>
+    </div>
+    <p class="cat-hint">Our kitties have something to tell you 🐾</p>
+
+    <div class="notes" id="notes"></div>
+
+    <div class="random-card">
+      <p class="msg" id="randomMsg">Tap the button for a little surprise 🌷</p>
+      <button class="btn" id="randomBtn" type="button">Give me a hug-sized message 🤍</button>
+    </div>
+  </section>
+
+  <!-- REASONS -->
+  <section id="reasons">
+    <h2>Reasons I love you 💗</h2>
+    <p class="sub">Tap a number to open a little love note.</p>
+    <p class="progress" id="progress"></p>
+    <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+    <div class="tiles" id="tiles"></div>
+    <div class="center-row">
+      <button class="btn ghost" id="randomReason" type="button">Open a random one ✨</button>
+    </div>
+  </section>
+
+  <!-- MEMORY LANE -->
+  <section id="memories">
+    <h2>Our memory lane ✨</h2>
+    <p class="sub">A little timeline of us.</p>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <!-- SURPRISE -->
+  <section class="psst" id="surprise">
+    <h2>Psst… my girl, there's one more thing.</h2>
+    <button class="btn glow" id="surpriseBtn" type="button">Tap me, my love 🥹</button>
+  </section>
+
+  <!-- MUSIC -->
+  <section id="music">
+    <h2>Our little music corner 🎧</h2>
+    <p class="sub">Press play whenever you like.</p>
+    <div class="player" id="player">
+      <div class="vinyl" id="vinyl" aria-hidden="true"></div>
+      <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="song-title" id="songTitle">Our Song</p>
+      <p class="song-artist" id="songArtist">Artist</p>
+      <button class="btn" id="playBtn" type="button" aria-pressed="false"><span id="playLabel">▶ Play</span></button>
+      <a class="btn ghost" id="listenLink" href="#" target="_blank" rel="noopener noreferrer" hidden>🎧 Listen to the full song</a>
+      <p class="music-note" id="musicNote"></p>
+    </div>
+  </section>
+
+  <footer id="footer">made with love 💗</footer>
+</div>
+
+<!-- Reason sheet -->
+<div class="sheet-back" id="sheetBack" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetNum">
+    <button class="x" id="sheetClose" type="button" aria-label="Close">✕</button>
+    <p class="num" id="sheetNum"></p>
+    <p class="why" id="sheetText"></p>
+    <div class="nav">
+      <button class="btn ghost" id="prevR" type="button" aria-label="Previous reason">‹ Back</button>
+      <button class="btn" id="nextR" type="button" aria-label="Next reason">Next ›</button>
+    </div>
+  </div>
+</div>
+
+<!-- Full-screen surprise moment -->
+<div class="moment" id="moment" role="dialog" aria-modal="true" aria-label="A message for you" hidden>
+  <div class="moment-hearts" id="momentHearts"></div>
+  <button class="x" id="momentX" type="button" aria-label="Close">✕</button>
+  <p class="l1" id="momentL1"></p>
+  <p class="l2" id="momentL2"></p>
+  <button class="close" id="momentClose" type="button">Back to our little world 💗</button>
+</div>
+
+<noscript><p style="position:fixed;inset:auto 0 0 0;z-index:3000;background:#fff;padding:1rem;text-align:center">Please turn on JavaScript to open your surprise 💗</p></noscript>
+
+<script>
+/* =====================================================================
+   ★★★  PERSONALIZE HERE  ★★★
+   Change the text between the quote marks. Don't delete the quotes,
+   commas, or brackets. Everything below this block works automatically.
+   Use {name} to insert her name, {nick} for your nickname for her,
+   and {me} for your name/nickname.
+   ===================================================================== */
+const CONFIG = {
+
+  /* ---- Names ---- */
+  girlName: "Noor",            // her name
+  nickname: "my love",         // what you call her
+  myName:   "your favorite idiot", // you (used in a few places)
+
+  /* ---- Welcome screen ---- */
+  welcome: {
+    title:  "Hey, my pretty girl… 🎀",
+    text:   "I made a little something just for you, my love. Every little detail comes from my heart.",
+    button: "Open your little surprise 💌"
+  },
+  heroLine: "A tiny world, built just for my favorite person.",
+
+  /* ---- Important dates (format: "YYYY-MM-DD", or leave "" to hide) ---- */
+  importantDates: {
+    togetherSince: ""          // e.g. "2025-02-14" shows "X days of us" on the first screen
+  },
+
+  /* ---- Colors (any hex colors) ---- */
+  colors: {
+    cream: "#fff6f0",
+    blush: "#ffd9e2",
+    pink:  "#ff8fab",
+    rose:  "#c92f5d",          // buttons. Keep it fairly dark so white text stays readable
+    deep:  "#5b2438"           // main text color
+  },
+
+  /* ---- Love letter (each line in quotes = one paragraph) ---- */
+  letter: [
+    "{name}, {nick},",
+    "I wanted to put something into words, and a plain message never felt big enough. So I built you a little world instead.",
+    "You make ordinary days feel beautiful. Not with big gestures, just by being you. A normal afternoon turns softer the moment you're part of it.",
+    "I'm so grateful to have you in my life. I don't always say it as often as I feel it, so let me say it plainly: thank you for being you.",
+    "You're not just my favorite person. You're my favorite feeling, my safe place, and the little happiness I never want to lose.",
+    "Whatever today looks like for you, I hope this reminds you that somebody is thinking of you with a very full heart."
+  ],
+  letterSignature: "Forever yours, your favorite idiot. 💗",
+
+  /* ---- Sweet notes shown in the love corner ---- */
+  notes: [
+    "You're so precious to me",
+    "Come here, you deserve a hug",
+    "I'd choose you again",
+    "You're my favorite person",
+    "Smile, I'm thinking of you"
+  ],
+
+  /* ---- Messages the two kitties say when tapped ---- */
+  catMessages: [
+    "Meow… you're so loved 💗",
+    "We think you're the cutest, {name}",
+    "Purr purr… come cuddle with us",
+    "He's been smiling about you all day 🐾",
+    "We voted: you're the best human",
+    "Psst… he adores you very much"
+  ],
+
+  /* ---- The random "hug-sized" messages ---- */
+  randomMessages: [
+    "You're so precious to me 🌷",
+    "Come here, you deserve a hug 🤍",
+    "I'd choose you again 💗",
+    "You make my world softer 🌸",
+    "Thinking of you, as usual 💭",
+    "You're my favorite notification 📱",
+    "Take a deep breath. You're doing wonderfully 🌼",
+    "You deserve all the sweet things 🍓",
+    "Somebody is really proud of you 🎀",
+    "You're my little happiness 💕",
+    "Sending you the gentlest hug 🫶",
+    "You're lovely, {name}. Never forget it ✨"
+  ],
+
+  /* ---- Reasons I love you (edit, add or remove lines freely) ---- */
+  reasons: [
+    "Your beautiful eyes, which I could get lost in without noticing the time.",
+    "The way you make me smile without even trying.",
+    "Your adorable personality. There's truly no one like it.",
+    "The happiness I feel every time I talk to you.",
+    "The little things that make you uniquely you.",
+    "The way you make ordinary moments feel special.",
+    "Your smile, which has a way of fixing my whole mood.",
+    "How easy it is to be myself around you.",
+    "The sound of your laugh. I could never get tired of it.",
+    "You make me want to be a softer, better person.",
+    "Seeing your name on my screen is my favorite notification.",
+    "You make quiet moments feel full.",
+    "The way you care about the people you love.",
+    "You're so precious to me, in ways I can't fully explain.",
+    "Because with you, even a plain day feels like a gift.",
+    "Your presence feels like a warm blanket on a cold day.",
+    "The way you light up when something makes you happy.",
+    "You make me believe in little miracles.",
+    "Your kindness, which I notice even when you don't mention it.",
+    "You are my favorite person to think about.",
+    "How you make me feel chosen.",
+    "The comfort of knowing you're in my corner.",
+    "Your gentle heart.",
+    "The way you can turn a bad day around just by being there.",
+    "You're beautiful inside and out, and I mean both.",
+    "The way you make me feel less alone with my thoughts.",
+    "The little pause I take just to appreciate that you exist.",
+    "You make me laugh at the silliest things.",
+    "The way you make me feel understood.",
+    "Your cuteness. It's honestly unfair.",
+    "You make the whole world look softer.",
+    "You're the reason I check my phone with a smile.",
+    "How you make waiting for a message feel worth it.",
+    "Your voice, which I'd recognize anywhere.",
+    "The way you make me feel like I'm enough.",
+    "Because loving you feels natural, like breathing.",
+    "Your strength, even on the days you don't feel strong.",
+    "You deserve every good thing, and I want you to have all of it.",
+    "How you make small things feel big and big things feel manageable.",
+    "Your sweetness.",
+    "The little flip my heart does when I think of you.",
+    "You inspire me to be more patient and kind.",
+    "You're the first person I want to tell good news to.",
+    "Thinking of you makes me smile in the middle of boring days.",
+    "You make love feel gentle.",
+    "Your place in my life is something I'm deeply thankful for.",
+    "The way you're a little bit magic. I'm not exaggerating.",
+    "You make \"home\" feel like a person.",
+    "Because I'd choose you again, every single time.",
+    "You're my favorite hello.",
+    "The way a simple chat with you can feel like a hug.",
+    "Your imperfections, which make you so real and so lovable.",
+    "Because you make my heart feel calm.",
+    "You're worth every bit of effort.",
+    "The way you deserve to be cherished, and how much I love cherishing you.",
+    "Your little quirks that I find unbearably cute.",
+    "The way you make me feel lucky.",
+    "You make me excited for tomorrow.",
+    "Because your happiness matters so much to me.",
+    "The warmth you carry with you.",
+    "The way you make me feel brave.",
+    "You're my favorite distraction.",
+    "How you make even silence feel comfortable.",
+    "Your beautiful soul.",
+    "Because you're my safe place.",
+    "You're the little happiness I never want to lose.",
+    "The way you make me proud to know you.",
+    "How you're soft and strong at the same time.",
+    "Your name, which feels like a tiny song.",
+    "Because you make my heart feel full.",
+    "The way you can be both adorable and wonderful at once.",
+    "You make me grateful for the small stuff.",
+    "The way you make me want to take care of you.",
+    "You're proof that good things really do happen.",
+    "Because you matter so much to me.",
+    "Your gentle way of making people feel seen.",
+    "The way my chest feels lighter when you're around.",
+    "You make me want to slow down and enjoy life.",
+    "The way you're simply, wonderfully you.",
+    "Because I'm happiest when you're happy.",
+    "Your sparkle, which nobody else has.",
+    "The way you make hard days feel lighter.",
+    "You make me feel like the luckiest idiot alive.",
+    "How I feel loved without you having to try.",
+    "The idea of sharing little moments with you.",
+    "You make my heart brave enough to be soft.",
+    "The cozy feeling I get when I think about you.",
+    "You're a reason I believe in good things.",
+    "Your presence feels like sunshine in a quiet room.",
+    "You make me want to be someone you're proud of.",
+    "You're the person I'd pick for a lazy day, a good day, or a hard one.",
+    "Because I never get tired of thinking about you.",
+    "How you turn an ordinary Tuesday into something sweet.",
+    "The hug I'm always saving up for you.",
+    "Because I love how my heart behaves around you.",
+    "The way you make \"us\" feel like a soft, safe little world.",
+    "You're my favorite feeling.",
+    "Because there's no one quite like you, {name}.",
+    "The way you've made my life more beautiful just by being in it.",
+    "Because I love you, and that's the biggest reason of all."
+  ],
+
+  /* ---- Memory lane ----
+     These are PLACEHOLDERS. For each one, write your own date, title and text,
+     then change  placeholder: true  to  placeholder: false  to remove the yellow tag.
+     You can add or delete entries too. */
+  memories: [
+    { label: "When we first met",
+      date: "[Add your date here]",
+      title: "Where it all began",
+      text: "[Placeholder: write about the moment you two met. What do you remember?]",
+      placeholder: true },
+    { label: "Our favorite conversation",
+      date: "[Add your date here]",
+      title: "That talk we loved",
+      text: "[Placeholder: write about a conversation that stayed with you.]",
+      placeholder: true },
+    { label: "Our special moments",
+      date: "[Add your date here]",
+      title: "A moment I treasure",
+      text: "[Placeholder: describe a moment that felt special to you both.]",
+      placeholder: true },
+    { label: "The day we became official",
+      date: "[Add your date here]",
+      title: "Officially us",
+      text: "[Placeholder: write about the day you made it official.]",
+      placeholder: true },
+    { label: "Our future dreams",
+      date: "Someday",
+      title: "What I hope for us",
+      text: "[Placeholder: write the dreams you'd love to share together.]",
+      placeholder: true }
+  ],
+
+  /* ---- Surprise moment (the full-screen message) ---- */
+  surprise: {
+    line1: "If I could give you one thing in this life, I'd give you the ability to see yourself through my eyes. Maybe then you'd understand just how incredibly special you are to me.",
+    line2: "Thank you for being you, my love. You make my world a little softer, brighter, and happier. 💗"
+  },
+
+  /* ---- Music ----
+     file: put your OWN audio file next to index.html (for example "song.mp3")
+     and write its name below. Leave "" for no audio (the disc still spins as a preview).
+     Only use music you have the right to use. It never plays automatically. */
+  music: {
+    title:  "Reflections",
+    artist: "The Neighbourhood",
+    file:   "",   // optional: your own audio file name, e.g. "reflections.mp3"
+    // Opens the song in her music app/browser (no audio file needed).
+    // You can swap this for a direct Spotify / YouTube / Apple Music link to the song.
+    link:   "https://open.spotify.com/search/Reflections%20The%20Neighbourhood"
+  },
+
+  footer: "Made with all my love, just for you, {name} 💗"
+};
+/* =====================  END OF PERSONALIZATION  ===================== */
+
+
+/* =====================================================================
+   Everything below makes the website work. You don't need to edit it.
+   ===================================================================== */
+(function () {
+  'use strict';
+  document.documentElement.classList.add('js');
+
+  var $  = function (s, r) { return (r || document).querySelector(s); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
+  function fill(t) {
+    return String(t)
+      .replace(/\{name\}/g, CONFIG.girlName)
+      .replace(/\{nick\}/g, CONFIG.nickname)
+      .replace(/\{me\}/g, CONFIG.myName);
+  }
+  // "Deck" picker: shows every item before repeating any.
+  function deck(arr) {
+    var bag = [], last = null;
+    return function () {
+      if (!bag.length) {
+        bag = arr.slice().sort(function () { return Math.random() - .5; });
+        if (bag.length > 1 && bag[bag.length - 1] === last) bag.reverse();
+      }
+      last = bag.pop();
+      return last;
+    };
+  }
+
+  /* ---------- Apply theme + simple text from CONFIG ---------- */
+  var C = CONFIG.colors || {}, root = document.documentElement.style;
+  if (C.cream) root.setProperty('--cream', C.cream);
+  if (C.blush) root.setProperty('--blush', C.blush);
+  if (C.pink)  root.setProperty('--pink', C.pink);
+  if (C.rose)  root.setProperty('--rose', C.rose);
+  if (C.deep)  root.setProperty('--deep', C.deep);
+
+  document.title = 'For ' + CONFIG.girlName + ' 💗';
+  $('#welcomeTitle').textContent = fill(CONFIG.welcome.title);
+  $('#welcomeText').textContent  = fill(CONFIG.welcome.text);
+  $('#welcomeBtn').textContent   = fill(CONFIG.welcome.button);
+  $('#heroName').textContent     = CONFIG.girlName;
+  $('#heroLine').textContent     = fill(CONFIG.heroLine);
+  $('#footer').textContent       = fill(CONFIG.footer);
+
+  // Days together (only shown if a date is provided and valid)
+  (function () {
+    var d = CONFIG.importantDates && CONFIG.importantDates.togetherSince;
+    if (!d) return;
+    var start = new Date(d + 'T00:00:00');
+    if (isNaN(start)) return;
+    var days = Math.floor((Date.now() - start.getTime()) / 86400000);
+    if (days < 0) return;
+    var el = $('#counter');
+    el.textContent = days.toLocaleString() + ' days of us 💞';
+    el.hidden = false;
+  })();
+
+  /* ---------- Effects: heart bursts + toast ---------- */
+  var fx = $('#fx');
+  function burst(x, y, n, set) {
+    if (fx.childElementCount > 36) return;
+    set = set || ['💗', '💕', '✨', '🌸', '🌷'];
+    var count = reduce ? Math.min(n, 3) : n;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement('span');
+      s.className = 'pop';
+      s.textContent = pick(set);
+      s.style.left = x + 'px';
+      s.style.top = y + 'px';
+      s.style.fontSize = (14 + Math.random() * 12) + 'px';
+      s.style.setProperty('--dx', (Math.random() * 130 - 65) + 'px');
+      s.style.setProperty('--dy', (-40 - Math.random() * 100) + 'px');
+      s.addEventListener('animationend', function () { this.remove(); }, { once: true });
+      fx.appendChild(s);
+    }
+  }
+  function burstEl(el, n) {
+    var r = el.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2, n || 7);
+  }
+  var toastTimer;
+  function toast(msg) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 2600);
+  }
+
+  /* Pause ambient animation when the tab is hidden (saves battery) */
+  document.addEventListener('visibilitychange', function () {
+    document.documentElement.classList.toggle('paused', document.hidden);
+  });
+
+  /* ---------- Ambient floating hearts (small, fixed number) ---------- */
+  var bgStarted = false;
+  function startBg() {
+    if (bgStarted || reduce) return;
+    bgStarted = true;
+    var bg = $('#bg'), set = ['💗', '🌸', '✨', '💕', '🌷', '🤍'];
+    for (var i = 0; i < 12; i++) {
+      var s = document.createElement('span');
+      s.textContent = set[i % set.length];
+      s.style.left = (Math.random() * 96) + '%';
+      s.style.fontSize = (12 + Math.random() * 14) + 'px';
+      s.style.animationDuration = (14 + Math.random() * 12) + 's';
+      s.style.animationDelay = (-Math.random() * 20) + 's';
+      s.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+      bg.appendChild(s);
+    }
+  }
+
+  /* ---------- Welcome -> main ---------- */
+  var app = $('#app');
+  $('#openBtn').addEventListener('click', function (e) {
+    burstEl(e.currentTarget, 12);
+    var w = $('#welcome');
+    w.classList.add('leave');
+    document.body.classList.remove('locked');
+    app.inert = false;
+    app.classList.add('show');
+    startBg();
+    window.scrollTo(0, 0);
+    setTimeout(function () { w.hidden = true; }, reduce ? 0 : 900);
+  });
+
+  $('#toLetter').addEventListener('click', function () {
+    $('#letter').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  });
+
+  /* ---------- Love letter ---------- */
+  var env = $('#env'), letterOpened = false, skipTyping = false;
+  async function typeLetter() {
+    var body = $('#letterBody');
+    body.textContent = '';
+    for (var i = 0; i < CONFIG.letter.length; i++) {
+      var text = fill(CONFIG.letter[i]);
+      var p = document.createElement('p');
+      p.className = 'typing';
+      body.appendChild(p);
+      if (reduce || skipTyping) {
+        p.textContent = text;
+      } else {
+        for (var c = 1; c <= text.length; c++) {
+          if (skipTyping) { p.textContent = text; break; }
+          p.textContent = text.slice(0, c);
+          await sleep(24);
+        }
+        if (!skipTyping) await sleep(350);
+      }
+      p.classList.remove('typing');
+    }
+    var sign = $('#letterSign');
+    sign.textContent = fill(CONFIG.letterSignature);
+    sign.classList.add('show');
+    $('#skipHint').hidden = true;
+    var r = sign.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top, 8);
+  }
+  env.addEventListener('click', function () {
+    if (letterOpened) return;
+    letterOpened = true;
+    env.classList.add('open');
+    env.setAttribute('aria-expanded', 'true');
+    $('#envHint').textContent = 'Opened 💗';
+    $('#paperWrap').classList.add('open');
+    burstEl(env, 8);
+    setTimeout(typeLetter, reduce ? 0 : 900);
+  });
+  $('#paper').addEventListener('click', function () { skipTyping = true; });
+
+  /* ---------- Love corner ---------- */
+  // Floating hearts in the garden
+  var garden = $('#garden'), caught = 0;
+  function placeHeart(h) {
+    h.style.left = (6 + Math.random() * 80) + '%';
+    h.style.top  = (8 + Math.random() * 50) + '%';
+    h.style.animationDelay = (-Math.random() * 3) + 's';
+  }
+  var heartSet = ['💗', '💖', '💕', '💓'];
+  for (var i = 0; i < 6; i++) {
+    var h = document.createElement('button');
+    h.type = 'button';
+    h.className = 'fh';
+    h.textContent = heartSet[i % heartSet.length];
+    h.setAttribute('aria-label', 'Floating heart');
+    placeHeart(h);
+    garden.appendChild(h);
+  }
+  var sweetCatch = ['Caught one!', 'So sweet 💗', 'You\'re adored', 'Love, caught', 'Another one for you'];
+  garden.addEventListener('click', function (e) {
+    var h = e.target.closest('.fh');
+    if (!h || h.classList.contains('gone')) return;
+    caught++;
+    burstEl(h, 7);
+    h.classList.add('gone');
+    $('#gardenCount').textContent = 'Catch the floating hearts 💗 · ' + caught + ' caught';
+    if (caught % 5 === 0) toast(pick(sweetCatch) + ' 💞');
+    setTimeout(function () { placeHeart(h); h.classList.remove('gone'); }, 1400);
+  });
+
+  // Cats
+  var catSay = deck(CONFIG.catMessages), catTimers = [];
+  document.querySelectorAll('.cat-btn').forEach(function (btn, idx) {
+    btn.addEventListener('click', function () {
+      btn.querySelector('.bubble').textContent = fill(catSay());
+      btn.classList.add('talk');
+      burstEl(btn, 4);
+      clearTimeout(catTimers[idx]);
+      catTimers[idx] = setTimeout(function () { btn.classList.remove('talk'); }, 3600);
+    });
+  });
+
+  // Sweet notes
+  var notesBox = $('#notes');
+  CONFIG.notes.forEach(function (n, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'note';
+    b.textContent = fill(n);
+    b.style.setProperty('--tilt', ((i % 2 ? 1 : -1) * (1 + (i % 3))) + 'deg');
+    b.addEventListener('click', function () { burstEl(b, 5); });
+    notesBox.appendChild(b);
+  });
+
+  // Random affectionate message
+  var nextMsg = deck(CONFIG.randomMessages);
+  $('#randomBtn').addEventListener('click', function (e) {
+    var m = $('#randomMsg');
+    m.classList.remove('swap');
+    void m.offsetWidth; // restart animation
+    m.textContent = fill(nextMsg());
+    m.classList.add('swap');
+    burstEl(e.currentTarget, 6);
+  });
+
+  /* ---------- Reasons ---------- */
+  var R = CONFIG.reasons, tiles = $('#tiles'), openedSet = new Set(), cur = 0, lastFocus = null;
+  var sheetBack = $('#sheetBack');
+  R.forEach(function (_, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tile';
+    b.textContent = i + 1;
+    b.dataset.i = i;
+    b.setAttribute('aria-label', 'Reason ' + (i + 1));
+    tiles.appendChild(b);
+  });
+  function updateProgress() {
+    $('#progress').textContent = 'You\'ve opened ' + openedSet.size + ' of ' + R.length + ' 💗';
+    $('#barFill').style.width = (R.length ? openedSet.size / R.length * 100 : 0) + '%';
+  }
+  updateProgress();
+
+  function showReason(i) {
+    cur = (i + R.length) % R.length;
+    $('#sheetNum').textContent = 'Reason ' + (cur + 1) + ' of ' + R.length;
+    var t = $('#sheetText');
+    t.textContent = fill(R[cur]);
+    t.classList.remove('swap'); void t.offsetWidth; t.classList.add('swap');
+    if (!openedSet.has(cur)) {
+      openedSet.add(cur);
+      tiles.children[cur].classList.add('done');
+      updateProgress();
+      if (openedSet.size === R.length) {
+        setTimeout(function () { toast('You opened every single one 🥹💗'); }, 400);
+      }
+    }
+    var r = $('#sheetNum').getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + 40, 5);
+  }
+  function openSheet(i) {
+    lastFocus = document.activeElement;
+    sheetBack.hidden = false;
+    document.body.classList.add('locked');
+    requestAnimationFrame(function () { sheetBack.classList.add('show'); });
+    showReason(i);
+    $('#sheetClose').focus({ preventScroll: true });
+  }
+  function closeSheet() {
+    sheetBack.classList.remove('show');
+    document.body.classList.remove('locked');
+    setTimeout(function () { sheetBack.hidden = true; }, reduce ? 0 : 300);
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+  }
+  tiles.addEventListener('click', function (e) {
+    var b = e.target.closest('.tile');
+    if (b) openSheet(+b.dataset.i);
+  });
+  $('#prevR').addEventListener('click', function () { showReason(cur - 1); });
+  $('#nextR').addEventListener('click', function () { showReason(cur + 1); });
+  $('#sheetClose').addEventListener('click', closeSheet);
+  sheetBack.addEventListener('click', function (e) { if (e.target === sheetBack) closeSheet(); });
+  $('#randomReason').addEventListener('click', function () {
+    var left = [];
+    for (var i = 0; i < R.length; i++) if (!openedSet.has(i)) left.push(i);
+    openSheet(left.length ? pick(left) : Math.floor(Math.random() * R.length));
+  });
+
+  /* ---------- Memory lane ---------- */
+  var tl = $('#timeline');
+  CONFIG.memories.forEach(function (m) {
+    var item = document.createElement('div'); item.className = 'mem';
+    var card = document.createElement('div'); card.className = 'card';
+    var when = document.createElement('p'); when.className = 'when'; when.textContent = m.label + ' · ' + m.date;
+    var h = document.createElement('h3'); h.textContent = fill(m.title);
+    var p = document.createElement('p'); p.textContent = fill(m.text);
+    card.appendChild(when); card.appendChild(h); card.appendChild(p);
+    if (m.placeholder) {
+      var tag = document.createElement('span');
+      tag.className = 'badge';
+      tag.textContent = '✏️ Placeholder: edit this in CONFIG.memories';
+      card.appendChild(tag);
+    }
+    item.appendChild(card);
+    tl.appendChild(item);
+  });
+  var mems = tl.querySelectorAll('.mem');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.15 });
+    mems.forEach(function (m) { io.observe(m); });
+  } else {
+    mems.forEach(function (m) { m.classList.add('in'); });
+  }
+
+  /* ---------- Full-screen surprise ---------- */
+  var moment = $('#moment'), mToken = 0, mLast = null;
+  $('#momentL1').textContent = fill(CONFIG.surprise.line1);
+  $('#momentL2').textContent = fill(CONFIG.surprise.line2);
+  async function openMoment() {
+    var my = ++mToken;
+    mLast = document.activeElement;
+    moment.hidden = false;
+    document.body.classList.add('locked');
+    requestAnimationFrame(function () { moment.classList.add('show'); });
+    $('#momentX').focus({ preventScroll: true });
+
+    // A small number of rising hearts (kept light for phones)
+    var box = $('#momentHearts');
+    box.textContent = '';
+    if (!reduce) {
+      for (var i = 0; i < 10; i++) {
+        var s = document.createElement('span');
+        s.className = 'rise';
+        s.textContent = pick(['💗', '💕', '✨', '🤍']);
+        s.style.left = (Math.random() * 92) + '%';
+        s.style.fontSize = (16 + Math.random() * 16) + 'px';
+        s.style.animationDuration = (7 + Math.random() * 6) + 's';
+        s.style.animationDelay = (Math.random() * 6) + 's';
+        s.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+        box.appendChild(s);
+      }
+    }
+    await sleep(reduce ? 200 : 1200);
+    if (my !== mToken) return;
+    $('#momentL1').classList.add('on');
+    await sleep(reduce ? 600 : 7500);
+    if (my !== mToken) return;
+    $('#momentL2').classList.add('on');
+    await sleep(reduce ? 400 : 2800);
+    if (my !== mToken) return;
+    $('#momentClose').classList.add('on');
+  }
+  function closeMoment() {
+    mToken++;
+    moment.classList.remove('show');
+    document.body.classList.remove('locked');
+    setTimeout(function () {
+      moment.hidden = true;
+      $('#momentL1').classList.remove('on');
+      $('#momentL2').classList.remove('on');
+      $('#momentClose').classList.remove('on');
+      $('#momentHearts').textContent = '';
+    }, reduce ? 0 : 1000);
+    if (mLast && mLast.focus) mLast.focus({ preventScroll: true });
+  }
+  $('#surpriseBtn').addEventListener('click', openMoment);
+  $('#momentX').addEventListener('click', closeMoment);
+  $('#momentClose').addEventListener('click', closeMoment);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!moment.hidden) closeMoment();
+    else if (!sheetBack.hidden) closeSheet();
+  });
+
+  /* ---------- Music (optional, never autoplays) ---------- */
+  var M = CONFIG.music, audio = null, playing = false;
+  $('#songTitle').textContent = M.title;
+  $('#songArtist').textContent = M.artist;
+  if (M.link) {
+    var ll = $('#listenLink');
+    ll.href = M.link;
+    ll.hidden = false;
+  }
+  function setPlaying(on) {
+    playing = on;
+    $('#vinyl').classList.toggle('spin', on);
+    $('#player').classList.toggle('on', on);
+    $('#playLabel').textContent = on ? '❚❚ Pause' : '▶ Play';
+    $('#playBtn').setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  if (M.file) {
+    audio = new Audio();
+    audio.preload = 'none';
+    audio.loop = true;
+    audio.src = M.file;
+  }
+  $('#playBtn').addEventListener('click', function () {
+    var note = $('#musicNote');
+    if (playing) {
+      if (audio) audio.pause();
+      setPlaying(false);
+      note.textContent = '';
+      return;
+    }
+    if (!audio) {
+      setPlaying(true);
+      note.textContent = 'The disc is dancing for now 🎶 Tap "Listen to the full song" to hear it.';
+      return;
+    }
+    var pr = audio.play();
+    if (pr && pr.then) {
+      pr.then(function () { setPlaying(true); note.textContent = ''; })
+        .catch(function () {
+          setPlaying(false);
+          note.textContent = 'I couldn\'t play that song. Check the file name in CONFIG.music.file 💗';
+        });
+    } else { setPlaying(true); }
+  });
+})();
+</script>
+</body>
+</html>
